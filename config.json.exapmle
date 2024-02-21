@@ -1,0 +1,13 @@
+{
+    "ldap": {
+        "host": "ldap://ldap.example.com",
+        "bindDn": "ou=people,dc=example,dc=com"
+    },
+    "expire": 600,
+    "aws": {
+        "accessKeyId": "your_access_key",
+        "secretAccessKey": "your_secret_key",
+        "hostedZoneId": "your_hosted_zone_id"
+    },
+    "domain": "example.com"
+}
