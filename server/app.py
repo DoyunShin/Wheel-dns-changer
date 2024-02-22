@@ -69,22 +69,22 @@ botor53 = boto3.client('route53', aws_access_key_id=config['aws']['accessKeyId']
 
 @app.route('/')
 def index():
-    root = Path("../front/build/")
+    root = Path("www/")
     return send_file(root.joinpath("index.html"))
 
 @app.route('/index.html')
 def index_html():
-    root = Path("../front/build/")
+    root = Path("www/")
     return send_file(root.joinpath("index.html"))
 
 @app.route('/robots.txt')
 def robots():
-    root = Path("../front/build/")
+    root = Path("www/")
     return send_file(root.joinpath("robots.txt"))
 
 @app.route('/static/<path:path>')
 def index(path):
-    root = Path("../front/build/static")
+    root = Path("www/static")
     if path != "" and root.joinpath(path).is_file():
         return send_from_directory(root, path)
     else:
