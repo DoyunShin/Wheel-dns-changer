@@ -80,6 +80,14 @@ def index(path):
     else:
         return "Not Found", 404
 
+@app.route('/static/<path:path>')
+def static(path):
+    root = Path("../front/build/static/")
+    if root.joinpath(path).is_file():
+        return send_from_directory(root, path)
+    else:
+        return "Not Found", 404
+
 @app.route('/api/auth', methods=['POST'])
 def auth():
     global session
