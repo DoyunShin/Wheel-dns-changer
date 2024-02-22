@@ -72,13 +72,10 @@ def root():
     root = Path("../front/build/")
     return send_file(root.joinpath("index.html"))
 
-@app.route('/<path:path>')
-def index(path):
+@app.route('/index.html')
+def index_html():
     root = Path("../front/build/")
-    if path != "" and root.joinpath(path).is_file():
-        return send_from_directory(root, path)
-    else:
-        return "Not Found", 404
+    return send_file(root.joinpath("index.html"))
 
 @app.route('/static/<path:path>')
 def statics(path):
