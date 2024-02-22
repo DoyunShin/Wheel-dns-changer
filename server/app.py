@@ -8,7 +8,7 @@ import time
 import ldap3
 import boto3
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../front/build/static")
 CORS(app)
 ALLOWED_TYPES = ["A", "AAAA", "CNAME", "TXT"]
 
@@ -72,16 +72,11 @@ def root():
     root = Path("../front/build/")
     return send_file(root.joinpath("index.html"))
 
-@app.route('/index.html')
-def index_html():
+@app.route('/<path:path>')
+def catch_all(path):
     root = Path("../front/build/")
-    return send_file(root.joinpath("index.html"))
-
-@app.route('/static/<path:path>')
-def statics(path):
-    root = Path("../front/build/static/")
     if root.joinpath(path).is_file():
-        return send_from_directory(root, path)
+        return send_file(root.joinpath(path))
     else:
         return "Not Found", 404
 
