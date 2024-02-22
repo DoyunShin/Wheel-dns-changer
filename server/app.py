@@ -72,9 +72,19 @@ def index():
     root = Path("../front/build/")
     return send_file(root.joinpath("index.html"))
 
-@app.route('/<path:path>')
-def index(path):
+@app.route('/index.html')
+def index_html():
     root = Path("../front/build/")
+    return send_file(root.joinpath("index.html"))
+
+@app.route('/robots.txt')
+def robots():
+    root = Path("../front/build/")
+    return send_file(root.joinpath("robots.txt"))
+
+@app.route('/static/<path:path>')
+def index(path):
+    root = Path("../front/build/static")
     if path != "" and root.joinpath(path).is_file():
         return send_from_directory(root, path)
     else:
