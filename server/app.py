@@ -68,23 +68,13 @@ session = SessionManager()
 botor53 = boto3.client('route53', aws_access_key_id=config['aws']['accessKeyId'], aws_secret_access_key=config['aws']['secretAccessKey'])
 
 @app.route('/')
-def index():
-    root = Path("www/")
+def root():
+    root = Path("../front/build/")
     return send_file(root.joinpath("index.html"))
 
-@app.route('/index.html')
-def index_html():
-    root = Path("www/")
-    return send_file(root.joinpath("index.html"))
-
-@app.route('/robots.txt')
-def robots():
-    root = Path("www/")
-    return send_file(root.joinpath("robots.txt"))
-
-@app.route('/static/<path:path>')
+@app.route('/<path:path>')
 def index(path):
-    root = Path("www/static")
+    root = Path("../front/build/")
     if path != "" and root.joinpath(path).is_file():
         return send_from_directory(root, path)
     else:
