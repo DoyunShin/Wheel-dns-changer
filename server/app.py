@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, send_from_directory, send_file
 from flask_cors import CORS
 from json import dumps, loads
 from pathlib import Path
@@ -198,6 +198,20 @@ def update_dns():
     except Exception as e:
         raise e
         return dumps({'status': 500, 'message': f"Error in server. Contact wheel! {e}"}), 500
-    
+
+@app.route('/<path:path>')
+def index(path):
+    root = Path("../front/build/")
+    if path != "" and root.joinpath(path).is_file():
+        return send_from_directory(root, path)
+    else:
+        return "Not Found", 404
+
+@app.route('/')
+def index():
+    root = Path("../front/build/")
+    return send_file(root.joinpath("index.html"))
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
