@@ -169,6 +169,8 @@ def update_dns():
     
     changes = {"Changes": []}
     if domain in data and data[domain]['type'] != "":
+        if data[domain]['type'] == "TXT":
+            data[domain]['value'] = f"\"{data[domain]['value']}\""
         changes["Changes"].append({
             "Action": "UPSERT",
             "ResourceRecordSet": {
@@ -179,13 +181,16 @@ def update_dns():
             }
         })
     if domain in data and data[domain_txt]['type'] != "":
+        if data[domain_txt]['type'] == "TXT":
+            data[domain_txt]['value'] = f"\"{data[domain_txt]['value']}\""
+
         changes["Changes"].append({
             "Action": "UPSERT",
             "ResourceRecordSet": {
                 "Name": f"{domain_txt}.",
                 "Type": data[domain_txt]['type'],
                 "TTL": 300,
-                "ResourceRecords": [{"Value": "\"data[domain_txt]['value']\""}]
+                "ResourceRecords": [{"Value": data[domain]['value']}]
             }
         })
     
