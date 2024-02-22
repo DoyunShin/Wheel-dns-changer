@@ -67,6 +67,19 @@ config = loads(Path('config.json').read_text())
 session = SessionManager()
 botor53 = boto3.client('route53', aws_access_key_id=config['aws']['accessKeyId'], aws_secret_access_key=config['aws']['secretAccessKey'])
 
+@app.route('/')
+def index():
+    root = Path("../front/build/")
+    return send_file(root.joinpath("index.html"))
+
+@app.route('/<path:path>')
+def index(path):
+    root = Path("../front/build/")
+    if path != "" and root.joinpath(path).is_file():
+        return send_from_directory(root, path)
+    else:
+        return "Not Found", 404
+
 @app.route('/api/auth', methods=['POST'])
 def auth():
     global session
@@ -201,22 +214,7 @@ def update_dns():
         botor53.change_resource_record_sets(HostedZoneId=config['aws']['hostedZoneId'], ChangeBatch=changes)
         return dumps({'status': 200, 'message': 'Successfully updated records'}), 200
     except Exception as e:
-        raise e
         return dumps({'status': 500, 'message': f"Error in server. Contact wheel! {e}"}), 500
-
-@app.route('/<path:path>')
-def index(path):
-    root = Path("../front/build/")
-    if path != "" and root.joinpath(path).is_file():
-        return send_from_directory(root, path)
-    else:
-        return "Not Found", 404
-
-@app.route('/')
-def index():
-    root = Path("../front/build/")
-    return send_file(root.joinpath("index.html"))
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
